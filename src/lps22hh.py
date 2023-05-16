@@ -247,10 +247,14 @@ class Lps22hh:
     def get_low_pass_filter_configuration(self):
         return self._lpfp_cfg
     
-    def set_block_data_update(self):
-        self._bdu = 1
+    def set_block_data_update(self, data):
+        # BDU is used to inhibit the update of the output registers until all
+        # output registers parts are read, to avoids reading values from
+        # different sample times
+        # 0: Values updated continuously.
+        # 1: Values not updated until MSB, LSB and XLSB have been read
+        self._bdu = data
 
     def get_block_data_update(self):
         return self._bdu
-
 
