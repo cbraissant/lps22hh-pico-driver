@@ -166,16 +166,24 @@ class Lps22hh:
 
 
     def reset(self):
-        # Software reset procedure.
-        # The following registers are reset to their default value:
-        # INTERRUPT_CFG, THS_P_L, THS_P_H, IF_CTRL, CTRL_REG1, CTRL_REG2, CTRL_REG3
-        # FIFO_CTRL, FIFO_WTM, INT_SOURCE, FIFO_STATUS1, FIFO_STATUS2, STATUS
+        """
+        Reset the volatile registers to their default value  
+        The following registers are reset to their default value:
+        INTERRUPT_CFG, THS_P_L, THS_P_H, IF_CTRL, CTRL_REG1, CTRL_REG2, CTRL_REG3
+        FIFO_CTRL, FIFO_WTM, INT_SOURCE, FIFO_STATUS1, FIFO_STATUS2, STATUS
+        """
         self._swreset = 1
         while self._swreset:
             pass
 
 
     def boot(self):
+        """
+        Reboots memory content and reload trimming parameters.
+        Used to refresh the content of the internal registers stored in the flash.
+        The following registers are reset to their default value:
+        RPDS_L, RPDS_H
+        """
         self._boot = 1
         while self._boot_on:
             pass
@@ -217,6 +225,14 @@ class Lps22hh:
 
     @property
     def data_rate(self):
+        """
+        Output data rate (ODR) selection
+        When the ODR is set to 0, the device is in Power-down mode and the
+        content of the output data registers are not updated.
+        When the ODR bits are set to a value different than 0, the device is
+        in Continuous mode and automatically acquires a set of data
+        (pressure and temperature) at the frequency selected.
+        """
         # Default to one-shot mode (0) if _odr value not found
         return _ODR_MAP.get(self._odr, 0)
     
@@ -234,24 +250,43 @@ class Lps22hh:
 
 
     def trigger_measurement(self):
+        """
+        Triggers a single measurement of pressure and temperature.
+        Once the measurement is done, the bit will self-clear.
+        """
         self._one_shot = 1
 
 
     @property
-    def fifo_wtm(self):
+    def fifo_watermark(self):
+        """
+        FIFO watermark level, in number of samples
+        Used to indicate that the FIFO has reached a certain fill level
+        and generate interrupt
+        """
         return self._fifo_wtm
 
-    @fifo_wtm.setter    
-    def fifo_wtm(self, data):
+    @fifo_watermark.setter    
+    def fifo_watermark(self, data):
         self._fifo_wtm = data
     
 
     @property
     def low_noise_enable(self):
+        """
+        Select between low-current and low-noise.
+        • When set to '0', low-current mode is selected (default configuration);
+        • When set to '1', low-noise mode is selected
+        If ODR = 100 Hz or ODR = 200 Hz, this option is automatically switched
+        off and the value of the low-noise enable bit is ignored.
+        Note: For proper behavior of the pressure sensor, the mode must be
+        changed only when the device is in power-down mode (ODR = 0).
+        """
         return self._low_noise_en
     
     @low_noise_enable.setter
     def low_noise_enable(self, data):
+        # TODO Power down before changing mode
         self._low_noise_en = data
 
 
@@ -275,13 +310,15 @@ class Lps22hh:
 
     @property
     def block_data_update(self):
+        """
+        BDU is used to inhibit the update of the output registers until all
+        output registers parts are read, to avoids reading values from
+        different sample times
+        0: Values updated continuously.
+        1: Values not updated until MSB, LSB and XLSB have been read
+        """
         return self._bdu
-
+    
     @block_data_update.setter
     def block_data_update(self, data):
-        # BDU is used to inhibit the update of the output registers until all
-        # output registers parts are read, to avoids reading values from
-        # different sample times
-        # 0: Values updated continuously.
-        # 1: Values not updated until MSB, LSB and XLSB have been read
         self._bdu = data
