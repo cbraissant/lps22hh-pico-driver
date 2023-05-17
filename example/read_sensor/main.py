@@ -18,5 +18,5 @@ sensor.data_rate = 200
 sensor.block_data_update = 1
 
 while True:
-    if sensor.has_new_measurement:
+    if sensor.new_pressure_data:
         print(sensor.pressure)

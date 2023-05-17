@@ -245,8 +245,23 @@ class Lps22hh:
 
 
     @property
-    def has_new_measurement(self):
+    def new_pressure_data(self):
+        """
+        New pressure sample available in the output registers
+        Self cleared when the pressure sample is read
+        """
         return self._p_da
+
+
+    @property
+    def new_temperature_data(self):
+        """
+        New temperature sample available in the output registers
+        Self cleared when the temperature sample is read
+        """
+        return self._t_da
+    
+
 
 
     def trigger_measurement(self):

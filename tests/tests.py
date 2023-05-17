@@ -75,23 +75,23 @@ def test_functionnality():
 
 
     # FIFO
-    sensor.fifo_wtm = 0xAB
+    sensor.fifo_watermark = 0xAB
     Test('Set FIFO watermark').assert_equal(sensor._fifo_wtm, 0xAB)
-    Test('Read FIFO watermark').assert_equal(sensor.fifo_wtm, 0XAB)
+    Test('Read FIFO watermark').assert_equal(sensor.fifo_watermark, 0XAB)
 
 
     # Reset
     # The reset procedure clears multiple regiters,
     # but only the fifo wtm is tested
-    sensor.fifo_wtm = 0XAB
+    sensor.fifo_watermark = 0XAB
     sensor.reset()
-    Test('Reset - fifo wtm').assert_equal(sensor.fifo_wtm, 0X00)
+    Test('Reset - fifo wtm').assert_equal(sensor.fifo_watermark, 0X00)
 
     # New measurement
-    Test('No new measurement').assert_equal(sensor.has_new_measurement, 0x00)
+    Test('No new measurement').assert_equal(sensor.new_pressure_data, 0x00)
     sensor.trigger_measurement()
     sleep(1)
-    Test('Has new measurement').assert_equal(sensor.has_new_measurement, 0x01)
+    Test('Has new measurement').assert_equal(sensor.new_pressure_data, 0x01)
 
 
 if __name__ == "__main__":

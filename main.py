@@ -8,5 +8,5 @@ sensor = Lps22hh(spi, cs_pin)
 sensor.data_rate = 200
 
 while True:
-    if sensor.has_new_measurement:
+    if sensor.new_pressure_data:
         print(sensor.pressure)
