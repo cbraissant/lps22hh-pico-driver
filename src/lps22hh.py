@@ -41,14 +41,16 @@ _PRESSURE_RESOLUTION = 0.00024414  # 1 LSB = 1/4096 = 0.0002441406 hPa
 _TEMPERATURE_SENSITIVITY = 100     # 100 LSB = °C
 _TEMPERATURE_RESOLUTION =  0.01    # 1 LSB = 1/100 = 0.01 °C
 
-_ODR_ONE_SHOT = 0
-_ODR_1_HZ = 1
-_ODR_10_HZ = 2
-_ODR_25_HZ = 3
-_ODR_50_HZ = 4
-_ODR_75_HZ = 5
-_ODR_100_HZ = 6
-_ODR_200_HZ = 7
+_ODR_MAP = {
+    0: 0,   # One-shot mode
+    1: 1,   # 1 Hz
+    2: 10,  # 10 Hz
+    3: 25,  # 25 Hz
+    4: 50,  # 50 Hz
+    5: 75,  # 75 Hz
+    6: 100, # 100 Hz
+    7: 200, # 200 Hz
+}
 
 
 class Lps22hh:
@@ -215,28 +217,15 @@ class Lps22hh:
 
     @property
     def data_rate(self):
-        odr = [0, 1, 10, 25, 50, 75, 100, 200]
-        return odr[self._odr]
+        # Default to one-shot mode (0) if _odr value not found
+        return _ODR_MAP.get(self._odr, 0)
     
     @data_rate.setter
     def data_rate(self, data_rate):
-        if data_rate == 0:
-            odr = _ODR_ONE_SHOT
-        elif data_rate <= 1:
-            odr = _ODR_1_HZ
-        elif data_rate <= 10:
-            odr = _ODR_10_HZ
-        elif data_rate <= 25:
-            odr = _ODR_25_HZ
-        elif data_rate <= 50:
-            odr = _ODR_50_HZ
-        elif data_rate <= 75:
-            odr = _ODR_75_HZ
-        elif data_rate <= 100:
-            odr = _ODR_100_HZ
-        else:
-            odr = _ODR_200_HZ
-        self._odr = odr
+        for value, frequency in _ODR_MAP.items():
+            if data_rate <= frequency:
+                self._odr = value
+                break
 
 
     @property
