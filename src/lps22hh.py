@@ -140,26 +140,27 @@ class Lps22hh:
     _p_da = Bits(_STATUS, 0, 1)
     
 
-    def __init__(self, spi:SPI, cs_pin:Pin):
+    def __init__(self, spi:SPI, cs:Pin):
         self.spi = spi
-        self.cs_pin = cs_pin
+        self.cs = cs
 
 
-    def set_spi(self, spi:SPI):
-        self.spi = spi
-
-
-    def get_spi(self):
+    @property
+    def spi_device(self):
         return self.spi
 
+    @spi_device.setter
+    def spi_device(self, spi:SPI):
+        self.spi = spi
 
-    def set_cs_pin(self, cs_pin:Pin):
-        self.cs_pin = cs_pin
-        self.cs_pin.value(0)
 
+    @property
+    def cs_pin(self):
+        return self.cs
 
-    def get_cs_pin(self):
-        return self.cs_pin
+    @cs_pin.setter
+    def cs_pin(self, cs_pin:Pin):
+        self.cs = cs_pin
 
 
     def reset(self):
@@ -177,28 +178,48 @@ class Lps22hh:
         while self._boot_on:
             pass
 
-    def get_device_id(self):
+
+    @property
+    def device_id(self):
         return self._who_am_i
 
-    def get_raw_pressure(self):
+
+    @property
+    def raw_pressure(self):
         return self._press_out
 
-    def get_pressure(self):
-        return self.get_raw_pressure() * _PRESSURE_RESOLUTION
-    
-    def set_reference_pressure(self, data):
-        self._ref_p = data
 
-    def get_reference_pressure(self):
+    @property
+    def pressure(self):
+        return self.raw_pressure * _PRESSURE_RESOLUTION
+    
+
+    @property
+    def reference_pressure(self):
         return self._ref_p
 
-    def get_raw_temperature(self):
+    @reference_pressure.setter
+    def reference_pressure(self, data):
+        self._ref_p = data
+
+
+    @property
+    def raw_temperature(self):
         return self._temp_out
     
-    def get_temperature(self):
-        return self.get_raw_temperature() * _TEMPERATURE_RESOLUTION
+
+    @property
+    def temperature(self):
+        return self.raw_temperature * _TEMPERATURE_RESOLUTION
     
-    def set_data_rate(self, data_rate):
+
+    @property
+    def data_rate(self):
+        odr = [0, 1, 10, 25, 50, 75, 100, 200]
+        return odr[self._odr]
+    
+    @data_rate.setter
+    def data_rate(self, data_rate):
         if data_rate == 0:
             odr = _ODR_ONE_SHOT
         elif data_rate <= 1:
@@ -217,44 +238,61 @@ class Lps22hh:
             odr = _ODR_200_HZ
         self._odr = odr
 
+
+    @property
     def has_new_measurement(self):
         return self._p_da
-    
+
+
     def trigger_measurement(self):
         self._one_shot = 1
 
-    def set_fifo_wtm(self, data):
-        self._fifo_wtm = data
 
-    def get_fifo_wtm(self):
+    @property
+    def fifo_wtm(self):
         return self._fifo_wtm
+
+    @fifo_wtm.setter    
+    def fifo_wtm(self, data):
+        self._fifo_wtm = data
     
-    def set_low_noise_enable(self, data):
+
+    @property
+    def low_noise_enable(self):
+        return self._low_noise_en
+    
+    @low_noise_enable.setter
+    def low_noise_enable(self, data):
         self._low_noise_en = data
 
-    def get_low_noise_enable(self):
-        return self._low_noise_en
 
-    def set_low_pass_filter_enable(self, data):
-        self._en_lpfp = data
-
-    def get_low_pass_filter_enable(self):
+    @property
+    def low_pass_filter_enable(self):
         return self._en_lpfp
-  
-    def set_low_pass_filter_configuration(self, data):
-        self._lpfp_cfg = data
 
-    def get_low_pass_filter_configuration(self):
+    @low_pass_filter_enable.setter
+    def low_pass_filter_enable(self, data):
+        self._en_lpfp = data
+  
+
+    @property
+    def low_pass_filter_configuration(self):
         return self._lpfp_cfg
     
-    def set_block_data_update(self, data):
+    @low_pass_filter_configuration.setter
+    def low_pass_filter_configuration(self, data):
+        self._lpfp_cfg = data
+
+
+    @property
+    def block_data_update(self):
+        return self._bdu
+
+    @block_data_update.setter
+    def block_data_update(self, data):
         # BDU is used to inhibit the update of the output registers until all
         # output registers parts are read, to avoids reading values from
         # different sample times
         # 0: Values updated continuously.
         # 1: Values not updated until MSB, LSB and XLSB have been read
         self._bdu = data
-
-    def get_block_data_update(self):
-        return self._bdu
-

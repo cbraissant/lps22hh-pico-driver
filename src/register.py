@@ -37,10 +37,10 @@ class Register:
         self.length = length
     
     def start_transaction(self, obj, objtype=None):
-        obj.cs_pin.value(0)
+        obj.cs.value(0)
     
     def end_transaction(self, obj, objtype=None):
-        obj.cs_pin.value(1)
+        obj.cs.value(1)
 
     def convert_bytes_to_int(self, bytes):
         return int.from_bytes(bytes, 'little')

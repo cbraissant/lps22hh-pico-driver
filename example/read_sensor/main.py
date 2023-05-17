@@ -10,13 +10,13 @@ sensor = Lps22hh(spi, cs_pin)
 
 # By default, the device is in power-down mode and the ODR need to be changed
 # for the device to take continuous measurements
-sensor.set_data_rate(200)
+sensor.data_rate = 200
 
 # The Block Data Update (BDU) is used to inhibit the update of the output
 # registers until all output registers parts are read, to avoids reading values
 # from different sample times
-sensor.set_block_data_update(1)
+sensor.block_data_update = 1
 
 while True:
-    if sensor.has_new_measurement():
-        print(sensor.get_pressure())
+    if sensor.has_new_measurement:
+        print(sensor.pressure)

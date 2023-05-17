@@ -50,48 +50,48 @@ def test_functionnality():
     print(f'{bcolors.BOLD}{bcolors.BRIGHT_BLUE}-- Functionnalities --{bcolors.DEFAULT}')
    
     # Device Id
-    Test('Read single register').assert_equal(sensor.get_device_id(), 0xB3)
+    Test('Read single register').assert_equal(sensor.device_id, 0xB3)
  
 
     # SPI
-    Test('Get SPI').assert_equal(sensor.get_spi(), spi)
+    Test('Get SPI').assert_equal(sensor.spi, spi)
     new_spi = SPI(1, baudrate=1000000, firstbit=SPI.MSB, sck=Pin(10), mosi=Pin(11), miso=Pin(8))
-    sensor.set_spi(new_spi)
-    Test('Set SPI - not old one').assert_not_equal(sensor.get_spi(), spi)
-    Test('Set SPI - new one').assert_equal(sensor.get_spi(), new_spi)
+    sensor.spi = new_spi
+    Test('Set SPI - not old one').assert_not_equal(sensor.spi, spi)
+    Test('Set SPI - new one').assert_equal(sensor.spi, new_spi)
 
 
     # CS Pin
-    Test('Get CS Pin').assert_equal(sensor.get_cs_pin(), cs_pin)
+    Test('Get CS Pin').assert_equal(sensor.cs_pin, cs_pin)
     new_cs_pin = Pin(9, Pin.OUT)
-    sensor.set_cs_pin(new_cs_pin)
-    Test('Set CS Pin - not old one').assert_not_equal(sensor.get_cs_pin(), cs_pin)
-    Test('Set CS Pin - new one').assert_equal(sensor.get_cs_pin(), new_cs_pin)
+    sensor.cs_pin = new_cs_pin
+    Test('Set CS Pin - not old one').assert_not_equal(sensor.cs_pin, cs_pin)
+    Test('Set CS Pin - new one').assert_equal(sensor.cs_pin, new_cs_pin)
 
 
     # Clean up
-    sensor.set_spi(spi)
-    sensor.set_cs_pin(cs_pin)
+    sensor.spi = spi
+    sensor.cs_pin = cs_pin
 
 
     # FIFO
-    sensor.set_fifo_wtm(0xAB)
+    sensor.fifo_wtm = 0xAB
     Test('Set FIFO watermark').assert_equal(sensor._fifo_wtm, 0xAB)
-    Test('Read FIFO watermark').assert_equal(sensor.get_fifo_wtm(), 0XAB)
+    Test('Read FIFO watermark').assert_equal(sensor.fifo_wtm, 0XAB)
 
 
     # Reset
     # The reset procedure clears multiple regiters,
     # but only the fifo wtm is tested
-    sensor.set_fifo_wtm(0XAB)
+    sensor.fifo_wtm = 0XAB
     sensor.reset()
-    Test('Reset - fifo wtm').assert_equal(sensor.get_fifo_wtm(), 0X00)
+    Test('Reset - fifo wtm').assert_equal(sensor.fifo_wtm, 0X00)
 
     # New measurement
-    Test('No new measurement').assert_equal(sensor.has_new_measurement(), 0x00)
+    Test('No new measurement').assert_equal(sensor.has_new_measurement, 0x00)
     sensor.trigger_measurement()
     sleep(1)
-    Test('Has new measurement').assert_equal(sensor.has_new_measurement(), 0x01)
+    Test('Has new measurement').assert_equal(sensor.has_new_measurement, 0x01)
 
 
 if __name__ == "__main__":
