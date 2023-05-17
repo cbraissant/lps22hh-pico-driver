@@ -151,6 +151,9 @@ class Lps22hh:
 
     @property
     def spi_device(self):
+        """
+        Serial Peripherical Interface (SPI)
+        """
         return self.spi
 
     @spi_device.setter
@@ -160,6 +163,9 @@ class Lps22hh:
 
     @property
     def cs_pin(self):
+        """
+        Chip Select Pin used to enable/disable the peripherical on the SPI Bus
+        """
         return self.cs
 
     @cs_pin.setter
