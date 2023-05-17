@@ -41,6 +41,8 @@ _PRESSURE_RESOLUTION = 0.00024414  # 1 LSB = 1/4096 = 0.0002441406 hPa
 _TEMPERATURE_SENSITIVITY = 100     # 100 LSB = °C
 _TEMPERATURE_RESOLUTION =  0.01    # 1 LSB = 1/100 = 0.01 °C
 
+_HPA_TO_MMHG = 0.75006157          # 1 hPa = 0.75006157 mmHg
+
 _ODR_MAP = {
     0: 0,   # One-shot mode
     1: 1,   # 1 Hz
@@ -191,36 +193,87 @@ class Lps22hh:
 
     @property
     def device_id(self):
+        """
+        Device identification
+        Return the value of the who_am_i register.
+        For the LPS22HH, the value is 179 (0xB3)
+        """
         return self._who_am_i
 
 
     @property
     def raw_pressure(self):
+        """
+        Pressure value as a 24-bit data.
+        The output pressure is provided as the difference between the
+        measured pressure and the content of the pressure offset register RPDS
+        The value is expressed as 2's complement.
+        """
         return self._press_out
 
 
     @property
     def pressure(self):
+        """
+        Pressure in [hPa]
+        """
         return self.raw_pressure * _PRESSURE_RESOLUTION
-    
+
 
     @property
-    def reference_pressure(self):
-        return self._ref_p
-
-    @reference_pressure.setter
-    def reference_pressure(self, data):
-        self._ref_p = data
+    def pressure_in_mmhg(self):
+        """
+        Pressure in [mmHg]
+        """
+        return self.pressure * _HPA_TO_MMHG
 
 
     @property
     def raw_temperature(self):
+        """
+        Temperature value as a 16-bit data.
+        The value is expressed as 2's complement.
+        """
         return self._temp_out
     
 
     @property
     def temperature(self):
+        """
+        Temperature in [°C]
+        """
         return self.raw_temperature * _TEMPERATURE_RESOLUTION
+    
+
+    @property
+    def temperature_in_kelvin(self):
+        """
+        Temperature in [K]
+        """
+        return self.temperature + 273.15
+    
+
+    @property
+    def temperature_in_farenheit(self):
+        """
+        Temperature in [°F]
+        """
+        return (self.temperature * 9/5) + 32
+    
+
+    @property
+    def reference_pressure(self):
+        """
+        Reference pressure value as a 16-bit data
+        User-defined value used as a baseline for pressure measurements.
+        Establish a reference point for pressure measurements and calculate
+        the pressure relative to this reference
+        """
+        return self._ref_p
+
+    @reference_pressure.setter
+    def reference_pressure(self, data):
+        self._ref_p = data
     
 
     @property
@@ -261,8 +314,6 @@ class Lps22hh:
         """
         return self._t_da
     
-
-
 
     def trigger_measurement(self):
         """
@@ -307,6 +358,11 @@ class Lps22hh:
 
     @property
     def low_pass_filter_enable(self):
+        """
+        Enables the low pass filter and diverts its output to the pressure
+        output registers and FIFO buffer.
+        The filter is reset if the data rate or the filter bandwidth change.
+        """
         return self._en_lpfp
 
     @low_pass_filter_enable.setter
@@ -316,6 +372,9 @@ class Lps22hh:
 
     @property
     def low_pass_filter_configuration(self):
+        """
+        Configure the device bandwidth for the low-pass filter
+        """
         return self._lpfp_cfg
     
     @low_pass_filter_configuration.setter
