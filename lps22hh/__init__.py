@@ -1,1 +1,1 @@
-from .lps22hh import Lps22hh
+from .lps22hh import LPS22HH

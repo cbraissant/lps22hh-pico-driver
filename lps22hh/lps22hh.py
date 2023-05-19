@@ -55,7 +55,7 @@ _ODR_MAP = {
 }
 
 
-class Lps22hh:
+class LPS22HH:
 
     # REGISTERS
     _interrupt_cfg = Register(_INTERRUPT_CFG, 1)

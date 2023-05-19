@@ -1,7 +1,7 @@
 from machine import SPI, Pin
 from time import sleep
 from tests.unittest import Test, bcolors
-from lps22hh import Lps22hh
+from lps22hh import LPS22HH
 
 def test_basic():
     print(f'{bcolors.BOLD}{bcolors.BRIGHT_BLUE}-- Basic testing --{bcolors.DEFAULT}')
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     cs_pin = Pin(1, Pin.OUT)
     spi = SPI(0, baudrate=1000000, firstbit=SPI.MSB, sck=Pin(2), mosi=Pin(3), miso=Pin(0))
 
-    sensor = Lps22hh(spi, cs_pin)
+    sensor = LPS22HH(spi, cs_pin)
 
     print(f'{bcolors.BOLD}{bcolors.BRIGHT_MAGENTA}Testing starts...{bcolors.DEFAULT}')
 

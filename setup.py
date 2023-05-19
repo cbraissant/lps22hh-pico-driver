@@ -17,7 +17,7 @@ classifiers = [
 
 setup(
     name = 'lps22hh',
-    version = '0.1.0',
+    version = '0.3.0',
     author = 'Chris Braissant',
     author_email = 'chrisbraissant@gmail.com',
     description = 'Raspberry Pi Pico Micropyhton library to interact with the ST LPS22HH Barometric pressure sensor',
