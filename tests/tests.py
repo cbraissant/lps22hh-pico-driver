@@ -1,13 +1,11 @@
 from machine import SPI, Pin
 from time import sleep
 from tests.unittest import Test, bcolors
-from src.lps22hh import Lps22hh
-from src.register import Register, Bits
+from lps22hh import Lps22hh
 
 def test_basic():
     print(f'{bcolors.BOLD}{bcolors.BRIGHT_BLUE}-- Basic testing --{bcolors.DEFAULT}')
     Test('Test sanity').assert_equal(1,1)
-
 
 def test_register():
     print(f'{bcolors.BOLD}{bcolors.BRIGHT_BLUE}-- Register testing --{bcolors.DEFAULT}')

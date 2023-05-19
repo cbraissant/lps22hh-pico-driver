@@ -1,5 +1,5 @@
 from machine import SPI, Pin
-from src.lps22hh import Lps22hh
+from lps22hh import Lps22hh
 
 cs_pin = Pin(1, Pin.OUT)
 spi = SPI(0, baudrate=1000000, firstbit=SPI.MSB, sck=Pin(2), mosi=Pin(3), miso=Pin(0))

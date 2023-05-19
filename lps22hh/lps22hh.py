@@ -5,7 +5,7 @@
 # 260-1260 hPa absolute digital output barometer
 
 from machine import SPI, Pin
-from src.register import Register, Bits
+from lps22hh.register import Register, Bits
 
 _INTERRUPT_CFG = 0x0B
 _THS_P_L = 0x0C
