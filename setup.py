@@ -22,8 +22,10 @@ setup(
     author_email = 'chrisbraissant@gmail.com',
     description = 'Raspberry Pi Pico Micropyhton library to interact with the ST LPS22HH Barometric pressure sensor',
     license = 'MIT',
-    url='https://github.com/cbraissant/lps22hh_pico_driver',
-    install_requires = [],
+    url='https://github.com/cbraissant/lps22hh-pico-driver',
+    install_requires = [
+        'pico-register'
+        ],
     classifiers=classifiers,
     long_description=readme,
     long_description_content_type = 'text/markdown'
