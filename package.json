@@ -1,0 +1,8 @@
+{
+  "urls": [
+    ["lps22h/__init__.py", "github:cbraissant/lps22hh-pico-driver/__init__.py"],
+    ["lps22h/register.py", "github:cbraissant/lps22hh-pico-driver/register.py"],
+    ["lps22h/lps22hh.py", "github:cbraissant/lps22hh-pico-driver/lps22hh.py"]
+  ],
+  "version": "0.1"
+}

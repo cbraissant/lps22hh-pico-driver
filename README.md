@@ -18,6 +18,14 @@ This driver enables seamless integration of the LPS22HH sensor with the Raspberr
 pip install lps22hh
 ```
 
+or 
+
+Use `mip` (see MicroPython [Package management](https://docs.micropython.org/en/latest/reference/packages.html)):
+
+```bash
+> mpremote mip install github:cbraissant/lps22hh-pico-driver
+```
+
 ## Getting Started
 ```python
 from machine import SPI, Pin
