@@ -1,21 +1,22 @@
 # LPS22HH Pico Driver
-
-Micropython library for the ST LPS22HH pressure sensor
+Micropython library for the ST LPS22HH and the LPS27HH pressure sensor
 
 ## Overview
-The LPS22HH sensor is a high-resolution digital output pressure sensor manufactured by STMicroelectronics.
-This driver enables seamless integration of the LPS22HH sensor with the Raspberry Pi Pico.
+The LPS22HH and LPS27HH sensors are high-resolution digital output pressure sensors manufactured by STMicroelectronics.
+This driver enables seamless integration of the sensors with the Raspberry Pi Pico.
 
 ## Features
-- Interface to communicate with the LPS22HH pressure sensor.
+- Interface to communicate with the LPS22HH and LPS27HH pressure sensor.
 - Reading of pressure and temperature values
 - Configuration of registers via dedicated functions
 - Communication via SPI (I2C not implemented yet)
 - Designed to be compatible with the Raspberry Pi Pico running on Micropython. Other boards not tested
 
 ## Installation
+Use `pip` (see [Python Package Index ](https://pypi.org/))
+
 ```bash
-pip install lps22hh
+> pip install lps22hh
 ```
 
 or 
