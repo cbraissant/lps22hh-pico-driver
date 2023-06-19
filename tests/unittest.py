@@ -52,4 +52,4 @@ class Test:
         if test!=expected:
             print(f'{bcolors.GREEN} PASSED', end="")
         else:
-            print(f'{bcolors.RED} FAILED ({test} but expected {expected})', end="")
+            print(f'{bcolors.RED} FAILED ({test} but expected something different than {expected})', end="")
