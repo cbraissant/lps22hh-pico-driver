@@ -35,33 +35,21 @@ class Register:
     def __init__(self, register_address:int, length:int):
         self.register_address = register_address
         self.length = length
-    
-    def start_transaction(self, obj, objtype=None):
-        obj.cs.value(0)
-    
-    def end_transaction(self, obj, objtype=None):
-        obj.cs.value(1)
-
-    def convert_bytes_to_int(self, bytes):
-        return int.from_bytes(bytes, 'little')
-    
-    def convert_int_to_bytes(self, data):
-        return data.to_bytes(self.length, 'little')
-            
+                
     def __get__(self, obj, objtype=None):
-        msg = bytearray()
-        msg.append(0x80 | self.register_address)
-        self.start_transaction(obj)
+        addr = 0x80 | self.register_address
+        msg = addr.to_bytes(1, 'little')
+        obj.cs.off()
         obj.spi.write(msg)
         data = obj.spi.read(self.length)
-        self.end_transaction(obj)
-        return self.convert_bytes_to_int(data)
+        obj.cs.on()
+        return int.from_bytes(data, 'little')
 
     def __set__(self, obj, data):
-        data_bytes = self.convert_int_to_bytes(data)
+        data_bytes = data.to_bytes(self.length, 'little')
         msg = bytearray()
         msg.append(self.register_address)
         msg.extend(data_bytes)
-        self.start_transaction(obj)
+        obj.cs.off()
         obj.spi.write(msg)
-        self.end_transaction(obj)
+        obj.cs.on()

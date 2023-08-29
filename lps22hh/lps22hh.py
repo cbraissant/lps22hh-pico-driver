@@ -223,7 +223,7 @@ class LPS22HH:
         """
         Pressure in [hPa]
         """
-        return self.raw_pressure * _PRESSURE_RESOLUTION
+        return self._press_out * _PRESSURE_RESOLUTION
 
 
     @property
@@ -248,7 +248,7 @@ class LPS22HH:
         """
         Temperature in [°C]
         """
-        return self.raw_temperature * _TEMPERATURE_RESOLUTION
+        return self._temp_out * _TEMPERATURE_RESOLUTION
     
 
     @property
