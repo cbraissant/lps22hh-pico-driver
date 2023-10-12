@@ -4,7 +4,6 @@
 # Driver for the ST LPS22HH:
 # High-performance MEMS nano pressure sensor:
 # 260-1260 hPa absolute digital output barometer
-from machine import SPI, Pin
 
 class Bits:
     def __init__(self, register_address, start_position:int, length:int):
