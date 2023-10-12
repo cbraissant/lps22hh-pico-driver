@@ -286,6 +286,27 @@ class LPS22HH:
     
 
     @property
+    def pressure_offset(self):
+        """
+        Pressure offset as a 16-bit data.
+        The pressure offset value can be used to implement one-point
+        calibration (OPC) after soldering.
+        The content of the RPDS registers is always automatically subtracted
+        from the compensated pressure output and provided to the standard
+        output pressure registers.
+        It is provided as the difference between the measured pressure and
+        the content of the RPDS registers multiplied by 256 (AN5387)
+        The value is expressed as 2's complement.
+        """
+        return self._rpds
+
+
+    @pressure_offset.setter
+    def pressure_offset(self, data):
+        self._rpds = data
+
+
+    @property
     def data_rate(self):
         """
         Output data rate (ODR) selection
@@ -407,7 +428,7 @@ class LPS22HH:
         """
         return self._bdu
     
-    
+
     @block_data_update.setter
     def block_data_update(self, data):
         self._bdu = data
