@@ -156,6 +156,7 @@ class LPS22HH:
         """
         return self.spi
 
+
     @spi_device.setter
     def spi_device(self, spi:SPI):
         self.spi = spi
@@ -167,6 +168,7 @@ class LPS22HH:
         Chip Select Pin used to enable/disable the peripherical on the SPI Bus
         """
         return self.cs
+
 
     @cs_pin.setter
     def cs_pin(self, cs_pin:Pin):
@@ -277,6 +279,7 @@ class LPS22HH:
         """
         return self._ref_p
 
+
     @reference_pressure.setter
     def reference_pressure(self, data):
         self._ref_p = data
@@ -295,6 +298,7 @@ class LPS22HH:
         # Default to one-shot mode (0) if _odr value not found
         return _ODR_MAP.get(self._odr, 0)
     
+
     @data_rate.setter
     def data_rate(self, data_rate):
         for value, frequency in _ODR_MAP.items():
@@ -338,6 +342,7 @@ class LPS22HH:
         """
         return self._fifo_wtm
 
+
     @fifo_watermark.setter    
     def fifo_watermark(self, data):
         self._fifo_wtm = data
@@ -356,6 +361,7 @@ class LPS22HH:
         """
         return self._low_noise_en
     
+
     @low_noise_enable.setter
     def low_noise_enable(self, data):
         # TODO Power down before changing mode
@@ -371,6 +377,7 @@ class LPS22HH:
         """
         return self._en_lpfp
 
+
     @low_pass_filter_enable.setter
     def low_pass_filter_enable(self, data):
         self._en_lpfp = data
@@ -383,6 +390,7 @@ class LPS22HH:
         """
         return self._lpfp_cfg
     
+
     @low_pass_filter_configuration.setter
     def low_pass_filter_configuration(self, data):
         self._lpfp_cfg = data
@@ -398,6 +406,7 @@ class LPS22HH:
         1: Values not updated until MSB, LSB and XLSB have been read
         """
         return self._bdu
+    
     
     @block_data_update.setter
     def block_data_update(self, data):
