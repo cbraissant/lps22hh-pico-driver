@@ -51,27 +51,6 @@ def test_functionnality():
     Test('Read single register').assert_equal(sensor.device_id, 0xB3)
  
 
-    # SPI
-    Test('Get SPI').assert_equal(sensor.spi, spi)
-    new_spi = SPI(1, baudrate=1000000, firstbit=SPI.MSB, sck=Pin(10), mosi=Pin(11), miso=Pin(8))
-    sensor.spi = new_spi
-    Test('Set SPI - not old one').assert_not_equal(sensor.spi, spi)
-    Test('Set SPI - new one').assert_equal(sensor.spi, new_spi)
-
-
-    # CS Pin
-    Test('Get CS Pin').assert_equal(sensor.cs_pin, cs_pin)
-    new_cs_pin = Pin(9, Pin.OUT)
-    sensor.cs_pin = new_cs_pin
-    Test('Set CS Pin - not old one').assert_not_equal(sensor.cs_pin, cs_pin)
-    Test('Set CS Pin - new one').assert_equal(sensor.cs_pin, new_cs_pin)
-
-
-    # Clean up
-    sensor.spi = spi
-    sensor.cs_pin = cs_pin
-
-
     # FIFO
     sensor.fifo_watermark = 0xAB
     Test('Set FIFO watermark').assert_equal(sensor._fifo_wtm, 0xAB)

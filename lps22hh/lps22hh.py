@@ -4,8 +4,8 @@
 # High-performance MEMS nano pressure sensor:
 # 260-1260 hPa absolute digital output barometer
 
-from machine import SPI, Pin
-from register import Register, Bits
+from machine import SPI, I2C, Pin
+from .register import Register, Bits
 
 _INTERRUPT_CFG = 0x0B
 _THS_P_L = 0x0C
@@ -144,35 +144,20 @@ class LPS22HH:
     _p_da = Bits(_STATUS, 0, 1)
     
 
-    def __init__(self, spi:SPI, cs:Pin):
-        self.spi = spi
-        self.cs = cs
-
-
-    @property
-    def spi_device(self):
+    def __init__(self, interface, cs=None, address=0x5D):
         """
-        Serial Peripherical Interface (SPI)
+        Initialize with either SPI or I2C interface.
+        For SPI: provide `interface=SPI(...)`, `cs=Pin(...)`
+        For I2C: provide `interface=I2C(...)`, `address=<i2c address>`
         """
-        return self.spi
-
-
-    @spi_device.setter
-    def spi_device(self, spi:SPI):
-        self.spi = spi
-
-
-    @property
-    def cs_pin(self):
-        """
-        Chip Select Pin used to enable/disable the peripherical on the SPI Bus
-        """
-        return self.cs
-
-
-    @cs_pin.setter
-    def cs_pin(self, cs_pin:Pin):
-        self.cs = cs_pin
+        if isinstance(interface, SPI):
+            self.spi = interface
+            self.cs = cs
+        elif isinstance(interface, I2C):
+            self.i2c = interface
+            self.i2c_addr = address
+        else:
+            raise TypeError("Interface must be an instance of machine.SPI or machine.I2C")
 
 
     def reset(self):
